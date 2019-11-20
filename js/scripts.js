@@ -29,24 +29,16 @@ function checkStatus(response) {
 function generateGallery(results) {
     const galleryHTML = results.map(item => {
         console.log(item);
-        const {
-            results: [{
-               name,
-               picture,
-               email,
-               location
-            }]
-        } = item;
 
         const htmlString = `
             <div class="card">
                     <div class="card-img-container">
-                        <img class="card-img" src="${ results.picture }" alt="profile picture">
+                        <img class="card-img" src="${ item.picture.large }" alt="profile picture">
                     </div>
                     <div class="card-info-container">
-                        <h3 id="name" class="card-name cap">${ results.name.first } ${ results.name.last }</h3>
-                        <p class="card-text">${ results.email }</p>
-                        <p class="card-text cap">${ results.location.city }, ${ results.location.state }</p>
+                        <h3 id="name" class="card-name cap">${ item.name.first } ${ item.name.last }</h3>
+                        <p class="card-text">${ item.email }</p>
+                        <p class="card-text cap">${ item.location.city }, ${ item.location.state }</p>
                     </div>
                 </div>
         `;
