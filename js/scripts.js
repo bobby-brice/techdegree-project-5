@@ -1,4 +1,9 @@
 //Fetching the data
+fetchData('https://randomuser.me/api/?results=12')
+.then(data => data.results)
+.then(generateHTML)
+
+
 
 function fetchData(url) {
     return fetch(url)
@@ -6,14 +11,6 @@ function fetchData(url) {
         .then(res => res.json())
         .catch(error => console.log("Looks like there was a problem", error))
 }
-
-Promise.all([
-        fetchData('https://randomuser.me/api/?results=12')
-    ])
-    .then(result => { 
-        console.log(result);
-        generateGallery(result);   
-    })
 
 
 //helper functions
@@ -26,6 +23,7 @@ function checkStatus(response) {
     }
 }
 
+<<<<<<< HEAD
 function generateGallery(results) {
     const galleryHTML = results.map(item => {
         console.log(item);
@@ -39,6 +37,13 @@ function generateGallery(results) {
         } = item;
 
         const htmlString = `
+=======
+function generateHTML(data) {
+    
+    data.forEach(item => {
+        
+        const galleryHTML = `
+>>>>>>> a7d614a72a5a9e646edcc010c1333900fe89de55
             <div class="card">
                     <div class="card-img-container">
                         <img class="card-img" src="${ item.picture.large }" alt="profile picture">
@@ -48,11 +53,12 @@ function generateGallery(results) {
                         <p class="card-text">${ item.email }</p>
                         <p class="card-text cap">${ item.location.city }, ${ item.location.state }</p>
                     </div>
-                </div>
-        `;
-        return htmlString;
-    }).join('');
-
-    document.getElementById('gallery').appendChild(galleryHTML);
+                </div>`
+                document.getElementById('gallery').innerHTML += galleryHTML;
+    });
+    
+    const modalHTML = `
+        
+        `
 }
 
