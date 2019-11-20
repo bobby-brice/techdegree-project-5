@@ -29,6 +29,14 @@ function checkStatus(response) {
 function generateGallery(results) {
     const galleryHTML = results.map(item => {
         console.log(item);
+        const {
+            results: [{
+               name,
+               picture,
+               email,
+               location
+            }]
+        } = item;
 
         const htmlString = `
             <div class="card">
