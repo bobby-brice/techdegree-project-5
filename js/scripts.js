@@ -1,7 +1,7 @@
 //Fetching the data
 fetchData('https://randomuser.me/api/?results=12')
 .then(data => data.results)
-.then(generateHTML)
+.then(generateHTML);
 
 
 
@@ -9,7 +9,7 @@ function fetchData(url) {
     return fetch(url)
         .then(checkStatus)
         .then(res => res.json())
-        .catch(error => console.log("Looks like there was a problem", error))
+        .catch(error => console.log("Looks like there was a problem", error));
 }
 
 
@@ -23,27 +23,11 @@ function checkStatus(response) {
     }
 }
 
-<<<<<<< HEAD
-function generateGallery(results) {
-    const galleryHTML = results.map(item => {
-        console.log(item);
-        const {
-            results: [{
-               name,
-               picture,
-               email,
-               location
-            }]
-        } = item;
-
-        const htmlString = `
-=======
 function generateHTML(data) {
     
     data.forEach(item => {
         
         const galleryHTML = `
->>>>>>> a7d614a72a5a9e646edcc010c1333900fe89de55
             <div class="card">
                     <div class="card-img-container">
                         <img class="card-img" src="${ item.picture.large }" alt="profile picture">
@@ -57,8 +41,5 @@ function generateHTML(data) {
                 document.getElementById('gallery').innerHTML += galleryHTML;
     });
     
-    const modalHTML = `
-        
-        `
 }
 
