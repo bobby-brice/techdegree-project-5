@@ -6,7 +6,7 @@ const modalDiv = document.createElement('div'); //creating the modal DIV and app
 modalDiv.setAttribute('class', 'modal-container');
 gallery.parentNode.insertBefore(modalDiv, gallery.nextElementSibling);
 modalDiv.style.display = 'none';
-let employeeData = [];
+let employeeData = []; //empty array to hold the json object
 const card = document.getElementsByClassName('card');
 
 
@@ -17,7 +17,7 @@ const card = document.getElementsByClassName('card');
 fetch('https://randomuser.me/api/?results=12&nat=us')
     .then(res => res.json())
     .then(data => addGallery(data))
-    .then(data => randomCard(data))
+    .then(data => generateCard(data))
     .catch(error => console.log("Looks like there was a problem", error))
 
 
@@ -66,14 +66,14 @@ function checkStatus(response) {
 
 function generateModal(i) {
 
-    const employee = employeeData[i];
+    const employee = employeeData[i]; 
 
     const year = employee.dob.date.slice(0, 4); //formatting the DOB to match markup
     const month = employee.dob.date.slice(5, 7);
     const day = employee.dob.date.slice(8, 10);
     const newBirthday = `${month}-${day}-${year}`
 
-    const modalHTML =
+    const modalHTML = //html template literal to add array data dynamically 
         `<div class="modal">
             <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
             <div class="modal-info-container">
@@ -93,45 +93,87 @@ function generateModal(i) {
         </div>`
 
     modalDiv.innerHTML = modalHTML;
-    
 
+/*
+    modal functions for open/close/prev/next
+*/
+    const close = document.getElementById('modal-close-btn');
+    const next = document.getElementById('modal-next');
+    const prev = document.getElementById('modal-prev');
 
-    $('#modal-close-btn').click(function () {
-        $('.modal-container').hide();
+    close.addEventListener('click', () => {
+        modalDiv.style.display = 'none';
     })
 
 
-    $('button#modal-next').click(function () {
+    next.addEventListener('click', () => {
         generateModal(i + 1);
-        $('.modal-container').show()
-
+        modalDiv.style.display = 'block';
     })
 
 
-    $('button#modal-prev').click(function () {
+    prev.addEventListener('click', () => {
         generateModal(i - 1);
-        $('.modal-container').show()
+        modalDiv.style.display = 'block';
 
     })
-    userNumber(i);
+    employeeNumber(i);
     }
     
-
-    function userNumber(i) {
+/*
+    Function to show or hide the next and previous buttons when the beginning/end of the employee card
+*/
+    function employeeNumber(i) {
+        const next = document.getElementById('modal-next');
+        const prev = document.getElementById('modal-prev');
         if (i <= 0) {
-            $('button#modal-prev').hide();
+            prev.style.display = 'none';
         } else if (i >= 11) {
-            $('button#modal-next').hide();
+            next.style.display = 'none';
         }
-
     }
-    // Add Event Listener to each Card Element
-    function randomCard() {
+
+/*
+    Event listener to call the generateModal at the selected card index and display it
+*/
+    function generateCard() {
         for (let i = 0; i < card.length; i++) {
             card[i].addEventListener('click', function () {
                 generateModal(i);
-                $('.modal-container').show();
+                modalDiv.style.display = 'block';
             })
+        }
+    }
+
+/*
+    SEARCH FUNCTIONALITY SECTION
+*/
+    const searchContainer = document.querySelector('.search-container');
+    const searchForm = document.createElement('form');
+    searchForm.setAttribute('action', '#');
+    searchForm.setAttribute('method', 'get');
+    searchContainer.appendChild(searchForm); //sets up the form element and appends to the container
+
+    searchForm.innerHTML = ` 
+        <input type="search" id="search-input" class="search-input" placeholder="Search...">
+        <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
+    `; //suggested markup
+
+    const searchInput = document.getElementById('search-input'); //targeting the search input and submit
+    const submit = document.getElementById('search-submit');
+
+    submit.addEventListener('click', searchEmployee); //on submit uses a callback to trigger the search function
+
+    function searchEmployee (e) {
+        
+        for (let i = 0; i < card.length; i++) {
+            const name = card[i].querySelector('#name').textContent.toLowerCase(); //normalize the content
+            if (name.includes(searchInput.value.toLowerCase())) { //if the input includes the search value
+                card[i].style.display = "flex";
+            } else {
+                e.preventDefault();
+                card[i].style.display = 'none';
+            }
         }
     }
 
