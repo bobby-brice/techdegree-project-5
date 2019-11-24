@@ -14,7 +14,7 @@ const card = document.getElementsByClassName('card');
     function to fetch and check for HTTP errors and provide input to the supporting functions
 */
 
-fetch('https://randomuser.me/api/?results=12&nat=us')
+fetch('https://randomuser.me/api/?results=12&nat=ca')
     .then(res => res.json())
     .then(data => addGallery(data))
     .then(data => generateCard(data))
